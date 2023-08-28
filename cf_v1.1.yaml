@@ -18,6 +18,8 @@ Resources:
           Value: "VPC"
 
 #Subnets
+#Questo set di 4 subnets è composto da due sub pubbliche e due private.
+# la Region è: eu-west-1
 
   PublicSubnet1:
     Type: AWS::EC2::Subnet
@@ -35,8 +37,23 @@ Resources:
       CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: true
 
-#routing table subnet pubbliche
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: eu-west-1a
+      CidrBlock: 10.0.2.0/24
 
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: eu-west-1b
+      CidrBlock: 10.0.3.0/24
+
+
+#Route Table Pubblica e Route
+#Di seguito la PublicRouteTable con route e associazione per puntare la publicsubnet1 all' InternetGateway
 
 
   PublicRouteTable:
@@ -60,37 +77,11 @@ Resources:
 
 
 
-#nat gateway
 
+#Route Table Pivata e Route
+# Table e route per far puntare la PrivateSubnet1 a internet attraverso il NATGateway
 
-  NATGateway:
-    Type: AWS::EC2::NatGateway
-    Properties:
-        AllocationId: !GetAtt NATGatewayEIP.AllocationId
-        SubnetId: !Ref PrivateSubnet1
-
-  NATGatewayEIP:
-    Type: AWS::EC2::EIP
-    Properties:
-        Domain: vpc
-
-
-#subnets private e routing table
-
-
-  PrivateSubnet1:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: eu-west-1a
-      CidrBlock: 10.0.2.0/24
-
-  PrivateSubnet2:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: eu-west-1b
-      CidrBlock: 10.0.3.0/24
+  
 
   PrivateRouteTable:
     Type: AWS::EC2::RouteTable
@@ -110,8 +101,39 @@ Resources:
       SubnetId: !Ref PrivateSubnet1
       RouteTableId: !Ref PrivateRouteTable
 
-#security group 
-  
+
+
+# NATGATEWAY
+# Qui ho creato l' Elastic IP e relativo NATGateway.
+
+  NATGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+        AllocationId: !GetAtt NATGatewayEIP.AllocationId
+        SubnetId: !Ref PrivateSubnet1
+
+  NATGatewayEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+        Domain: vpc
+
+# INTERNETGATEWAY
+# Creo l' Internet Gateway per instradare il traffico.  
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+# SECURITY GROUP
+# Questo security group permette il traffico in entrata con:
+# - il protocollo HTTP sulla porta 80.
+# - il protocollo SSH sulla porta 22.
+
   EC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -122,19 +144,9 @@ Resources:
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp # ssh connection
+        - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
 
 
-# gateways
-  
-  InternetGateway:
-    Type: AWS::EC2::InternetGateway
-
-  AttachGateway:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId: !Ref VPC
-      InternetGatewayId: !Ref InternetGateway
