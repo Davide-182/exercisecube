@@ -2,6 +2,15 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Architettura ad alta disponibilità per WordPress con RDS replica in standby
 
 
+
+Parameters:
+
+  WordPressVersion:
+    Description: Version of WordPress to install
+    Type: String
+    Default: latest
+    AllowedValues: [latest, 5.8.1, 5.8, 5.7.3, 5.7, 5.6.4, 5.6, 5.5.6, 5.5, 5.4.7, 5.4]
+
 Resources:
 
 #VPC
@@ -259,3 +268,58 @@ Resources:
       VpcId: !Ref VPC
       TargetType: instance
 
+# Istanza di database relazionale (DB) su Amazon RDS 
+# L'opzione "MultiAZ" è impostata su false, quindi non verrà utilizzata la replica in zone multiple. (è possibile abilitarla aggiornando la classe dell'istanza a "db.t3.micro")
+# L'opzione "StorageEncripted" è impostata su false, quindi l'archiviazione non verrà crittografata.
+
+  DBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBSubnetGroupName: !Ref "SubnetGroup"
+      AllocatedStorage: '20'
+      DBInstanceClass: db.t2.micro
+      Engine: mysql
+      EngineVersion: '5.7'
+      MasterUsername: admin
+      MasterUserPassword: admin123
+      MultiAZ: false
+      StorageType: gp2
+      StorageEncrypted: false
+    
+#  SubnetGroup per il DB
+#  Il gruppo di subnet definisce quali subnet all'interno del tuo VPC saranno utilizzate per le operazioni del database, come la replica e il failover.
+
+  SubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupName: "subnetgroup"
+      DBSubnetGroupDescription: "Subnet Group per l'istanza database"
+      SubnetIds:
+      - !Ref "PrivateSubnet1"
+      - !Ref "PrivateSubnet2"
+
+
+# Security group per le regole in entrata al database.
+
+  InstanceSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: "DB Security Group"
+      GroupDescription: "Gruppo per il traffico RDS"
+      VpcId: !Ref VPC
+      SecurityGroupEgress:
+      - IpProtocol: "-1" # "-1" sta per "accetta tutti i protocolli consentiti", ovvero tcp, udp, icmp, e icmpv6.
+        Description: "Regola in uscita verso tutto internet con qualsiasi protocollo"
+        CidrIp: "0.0.0.0/0"
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        Description: "Regola di sicurezza in entrata dal security group delle istanze EC2"
+        FromPort: 3306
+        ToPort: 3306
+        SourceSecurityGroupId: !Ref EC2SecurityGroup
+
+
+Outputs:
+  LoadBalancerDNSName:
+    Description: DNS name of the load balancer
+    Value: !GetAtt LoadBalancer.DNSName
