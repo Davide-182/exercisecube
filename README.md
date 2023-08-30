@@ -57,7 +57,7 @@ Utilizza AWS CLI e il file YAML per creare le risorse specificate:
 ```
 $ aws cloudformation create-stack --stack-name NomeStack --template-body file://cf_v1.4.yaml --region eu-west-1
 ```
-- Modifica "NomeStack" col nome che peferisci assegnare al tuo stack.
+- Modifica "NomeStack" col nome che preferisci assegnare al tuo stack.
 - modifica "/cf_v1.4.yaml" inserendo il path per il file, se non sei nella stessa directory.
 
 4. **Monitora lo stato dello stack:**
