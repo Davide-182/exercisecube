@@ -156,7 +156,7 @@ Resources:
     Type: AWS::EC2::NatGateway
     Properties:
         AllocationId: !GetAtt NATGatewayEIP.AllocationId
-        SubnetId: !Ref PrivateSubnet1
+        SubnetId: !Ref PublicSubnet1
 
   NATGatewayEIP:
     Type: AWS::EC2::EIP
@@ -299,7 +299,7 @@ Resources:
       TargetType: instance
 
 # Istanza di database relazionale (DB) su Amazon RDS 
-# L'opzione "MultiAZ" è impostata su false, quindi non verrà utilizzata la replica in zone multiple. (è possibile abilitarla aggiornando la classe dell'istanza a "db.t3.micro")
+# L'opzione "MultiAZ" è impostata su false, quindi non verrà utilizzata la replica in zone multiple. (è possibile abilitarla aggiornando la classe dell'istanza a "db.t3.micro", ma per questione di costi aggiuntivi lasceremo "db.t2.micro")
 # L'opzione "StorageEncripted" è impostata su false, quindi l'archiviazione non verrà crittografata.
 
   DBInstance:
