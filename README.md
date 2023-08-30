@@ -48,6 +48,7 @@ ed evita di inserire più avanti il comando "--region eu_west-1"
 
 ## Attenzione
 Le AMI per le risorse in questo file .yaml sono configurate per questa region.
+---
 
 3. **Esegui il provisioning delle risorse:**
 
