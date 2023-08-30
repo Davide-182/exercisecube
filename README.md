@@ -1,4 +1,4 @@
-# Guida alla Ricreazione della Struttura Cloud da YAML su AWS
+# Guida alla Ricreazione della Struttura Cloud su AWS
 
 Questo repository contiene un file YAML che descrive un'infrastruttura cloud su Amazon Web Services (AWS). Segui i passaggi seguenti per ricreare questa struttura nel tuo account AWS.
 
@@ -44,7 +44,7 @@ Inserisci le credenziali necessarie...
 - per "default region" puoi lasciare "None", definiremo in seguito la region in cui creare le nostre risorse. 
 
 Altrimenti digita: eu-west-1
-ed evita di inserire più avanti il comando "--region eu_west-1"
+ed evita di inserire più avanti il comando "--region eu-west-1"
 
 ## Attenzione
 Le AMI per le risorse in questo file .yaml sono configurate per questa region.
@@ -59,6 +59,7 @@ $ aws cloudformation create-stack --stack-name NomeStack --template-body file://
 ```
 - Modifica "NomeStack" col nome che peferisci assegnare al tuo stack.
 - modifica "/cf_v1.4.yaml" inserendo il path per il file, se non sei nella stessa directory.
+
 4. **Monitora lo stato dello stack:**
 
 Puoi monitorare lo stato dello stack in CloudFormation nella console AWS o utilizzando il seguente comando:
