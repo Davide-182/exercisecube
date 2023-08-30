@@ -348,6 +348,7 @@ Resources:
         ToPort: 3306
         SourceSecurityGroupId: !Ref EC2SecurityGroup
 
+# Distribuzione CloudFront
 
   CloudFrontDistribution:
     Type: 'AWS::CloudFront::Distribution'

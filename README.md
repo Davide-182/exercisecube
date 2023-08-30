@@ -2,6 +2,8 @@
 
 Questo repository contiene un file YAML che descrive un'infrastruttura cloud su Amazon Web Services (AWS). Segui i passaggi seguenti per ricreare questa struttura nel tuo account AWS.
 
+![PNG Struttura](/images/Structure_diagram.png)
+
 ## Prerequisiti
 
 - Un account AWS attivo.
@@ -21,10 +23,12 @@ $ git init
 - Clona il repository:
 ```
 $ git clone https://github.com/Davide-182/exercisecube.git
-cd <NOME_DEL_REPO>
+$ cd exercisecube
 ```
-   [O se preferisci, scarica il file .zip cliccando prima sul bottone verde "code"
-   al seguente link] (https://github.com/Davide-182/exercisecube.git)
+   O se preferisci, scarica il file .zip cliccando sul bottone verde "code"
+   al seguente link: https://github.com/Davide-182/exercisecube.git
+
+!["Code" button](/images/green_button.png)
 
 2. **Accedi al tuo account AWS:**
 
@@ -34,7 +38,16 @@ Assicurati di essere connesso al tuo account AWS tramite AWS CLI:
 $ aws configure
 ```
 
-Inserisci le credenziali necessarie.
+Inserisci le credenziali necessarie...
+- Access-Key
+- Secret-Key
+- per "default region" puoi lasciare "None", definiremo in seguito la region in cui creare le nostre risorse. 
+
+Altrimenti digita: eu-west-1
+ed evita di inserire più avanti il comando "--region eu_west-1"
+
+## Attenzione
+Le AMI per le risorse in questo file .yaml sono configurate per questa region.
 
 3. **Esegui il provisioning delle risorse:**
 
@@ -53,12 +66,12 @@ Puoi monitorare lo stato dello stack in CloudFormation nella console AWS o utili
 $ aws cloudformation describe-stacks --stack-name NomeStack --region eu-west-1
 ```
 
-   A questo punto, aspetta una decina di minuti e rilancia l'ultimo comando finché non vedrai "StackStatus": "CREATE_COMPLETE".
+   A questo punto, aspetta qualche minuto e rilancia l'ultimo comando finché non vedrai "StackStatus": "CREATE_COMPLETE".
 
 ![Screenshot dello Stack](/images/stack__create_complete.png)
 
 
-5. **Rimuovi le risorse (se necessario):**
+5. **Rimuovi le risorse:**
 
 Quando hai finito con le risorse, puoi rimuovere lo stack:
 
