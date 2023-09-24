@@ -1,0 +1,77 @@
+# cloudfront.yaml
+
+Resources:
+  CloudFrontDistribution:
+    Type: 'AWS::CloudFront::Distribution'
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !GetAtt 'LoadBalancerStack.Outputs.LoadBalancerDNSName'
+            Id: elb
+            CustomOriginConfig:
+              OriginProtocolPolicy: 'https-only'
+              OriginReadTimeout: 60
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - DELETE
+            - GET
+            - HEAD
+            - OPTIONS
+            - PATCH
+            - POST
+            - PUT
+          DefaultTTL: 0
+          MaxTTL: 0
+          MinTTL: 0
+          ForwardedValues:
+            QueryString: true
+            Headers:
+              - '*'
+            Cookies:
+              Forward: all
+          TargetOriginId: elb
+          ViewerProtocolPolicy: 'redirect-to-https'
+          Compress: true
+        CacheBehaviors:
+          - PathPattern: wp-includes/*
+            AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            DefaultTTL: 900
+            MaxTTL: 900
+            MinTTL: 900
+            ForwardedValues:
+              QueryString: true
+              Headers:
+                - 'Host'
+            TargetOriginId: elb
+            ViewerProtocolPolicy: 'redirect-to-https'
+            Compress: true
+          - PathPattern: wp-content/*
+            AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            DefaultTTL: 900
+            MaxTTL: 900
+            MinTTL: 900
+            ForwardedValues:
+              QueryString: true
+              Headers:
+                - 'Host'
+            TargetOriginId: elb
+            ViewerProtocolPolicy: 'redirect-to-https'
+            Compress: true
+        Enabled: true
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        PriceClass: 'PriceClass_All'

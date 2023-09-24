@@ -1,0 +1,8 @@
+Resources:
+  TargetGroup:
+      Type: AWS::ElasticLoadBalancingV2::TargetGroup
+      Properties:
+        Port: 80
+        Protocol: HTTP
+        VpcId: !Ref VPC
+        TargetType: instance

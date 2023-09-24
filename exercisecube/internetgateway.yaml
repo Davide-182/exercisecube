@@ -1,0 +1,11 @@
+# internetgateway.yaml
+
+Resources:
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPCStack.Outputs.VPCId
+      InternetGatewayId: !Ref InternetGateway

@@ -1,0 +1,19 @@
+# securitygroups.yaml
+
+Resources:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "DB Security Group"
+      GroupDescription: "Gruppo per il traffico RDS"
+      VpcId: !Ref VPCStack.Outputs.VPCId
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          Description: "Regola in uscita verso tutto internet con qualsiasi protocollo"
+          CidrIp: "0.0.0.0/0"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          Description: "Regola di sicurezza in entrata dal security group delle istanze EC2"
+          FromPort: 3306
+          ToPort: 3306
+          SourceSecurityGroupId: !Ref SecurityGroupsStack.Outputs.EC2SecurityGroupId

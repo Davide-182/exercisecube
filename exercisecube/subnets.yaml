@@ -1,0 +1,32 @@
+# subnets.yaml
+
+Resources:
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCStack.Outputs.VPCId
+      AvailabilityZone: eu-west-1a
+      CidrBlock: !Ref PublicSubnet1CidrBlock
+      MapPublicIpOnLaunch: true
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCStack.Outputs.VPCId
+      AvailabilityZone: eu-west-1b
+      CidrBlock: !Ref PublicSubnet2CidrBlock
+      MapPublicIpOnLaunch: true
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCStack.Outputs.VPCId
+      AvailabilityZone: eu-west-1a
+      CidrBlock: !Ref PrivateSubnet1CidrBlock
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCStack.Outputs.VPCId
+      AvailabilityZone: eu-west-1b
+      CidrBlock: !Ref PrivateSubnet2CidrBlock
