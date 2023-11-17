@@ -2,7 +2,7 @@
 
 Questo repository contiene un file YAML che descrive un'infrastruttura cloud su Amazon Web Services (AWS). Segui i passaggi seguenti per ricreare questa struttura nel tuo account AWS.
 
-![PNG Struttura](/images/Structure_diagram.png)
+![PNG Struttura](/exercisecube/images/Structure_diagram.png)
 
 ## Prerequisiti
 
@@ -21,7 +21,7 @@ $ cd exercisecube
    O se preferisci, scarica il file .zip cliccando sul bottone verde "code"
    al seguente link: https://github.com/Davide-182/exercisecube.git
 
-!["Code" button](/images/green_button.png)
+!["Code" button](/exercisecube/images/green_button.png)
 
 2. **Accedi al tuo account AWS:**
 
@@ -63,7 +63,7 @@ $ aws cloudformation describe-stacks --stack-name NomeStack --region eu-west-1
 
    A questo punto, aspetta qualche minuto e rilancia l'ultimo comando finché non vedrai "StackStatus": "CREATE_COMPLETE".
 
-![Screenshot dello Stack](/images/stack__create_complete.png)
+![Screenshot dello Stack](/exercisecube/images/stack__create_complete.png)
 
 
 5. **Rimuovi le risorse:**
